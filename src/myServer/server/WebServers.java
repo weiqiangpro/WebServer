@@ -1,12 +1,14 @@
-package myServer;
+package myServer.server;
 
+import myServer.annotation.RequestMappting;
 import myServer.factory.FactoryBean;
 import myServer.utils.ClassUtils;
-import myServer.utils.Log;
 import myServer.utils.MyServer;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @Author: weiqiang
@@ -17,6 +19,7 @@ public class WebServers {
     private static WebServers INSTANT = null;
     private  int PORT = 8080;
     private  String PATH = "";
+    private final ExecutorService service = Executors.newFixedThreadPool(16);
     private WebServers() {
     }
 
@@ -44,9 +47,9 @@ public class WebServers {
                 if (server.startsWith("."))
                     server = server.substring(1);
                 Class<?> aClass = Class.forName(server);
-                if (aClass.isAnnotationPresent(myServer.annotation.WebServer.class)) {
+                if (aClass.isAnnotationPresent(RequestMappting.class)) {
                     Object o = aClass.newInstance();
-                    myServer.annotation.WebServer annotation = aClass.getAnnotation(myServer.annotation.WebServer.class);
+                    RequestMappting annotation = aClass.getAnnotation(RequestMappting.class);
                     FactoryBean.beanFactory.put(annotation.mapping(), (MyServer) o);
                 }
             }
@@ -54,10 +57,10 @@ public class WebServers {
             ServerSocket ss = new ServerSocket(PORT);
             //开始循环监听来自客户端的请求
             Socket s = null;
-            Log.info("服务器启动成功!，端口号为8080");
+         //   Log.info("服务器启动成功!，端口号为8080");
             while (true) {
                 if (!((s = ss.accept()) != null)) break;
-                new HttpThread(s).start(); //开始一个新的线程
+                service.execute( new HttpThread(s)); //开始一个新的线程
             }
             ss.close();
         } catch (Exception e) {

@@ -1,4 +1,4 @@
-import myServer.WebServers;
+import myServer.server.WebServers;
 
 /**
  * @Author: weiqiang
@@ -6,8 +6,12 @@ import myServer.WebServers;
  */
 public class Application {
     public static void main(String[] args) {
-        WebServers.setup()
-                .port(8080)
-                .run();
+        myServer.Application
+                .setup()
+                .port(8888)
+                .path("wq")
+                .start();
+
+//       WebServers.setup().port(8888).path("wq").run();
     }
 }

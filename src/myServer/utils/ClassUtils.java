@@ -47,7 +47,6 @@ public class ClassUtils {
                 }
             } else {
                 String fileName = childFile.getName();
-                //endsWith() 方法用于测试字符串是否以指定的后�?结束�?  !fileName.contains("$") 文件名中不包�? '$'
                 if (fileName.endsWith(".class") && !fileName.contains("$")) {
                     className.add(packageName  + fileName.replace(".class", ""));
                 }

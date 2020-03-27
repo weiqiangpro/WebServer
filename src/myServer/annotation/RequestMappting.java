@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
  * @Author: weiqiang
  * @Time: 2020/3/16 下午8:39
  */
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface WebServer {
-    String mapping();
+public @interface RequestMappting {
+    String mapping() ;
 }
